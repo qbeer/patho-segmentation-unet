@@ -37,30 +37,35 @@ class UNET(Module):
         layer1 = relu(layer1)
         layer1 = self.layer_1_conv2(layer1)
         layer1 = relu(layer1)
+        print(layer1.shape)
 
         layer2 = MaxPool2d(2, stride=2)(layer1)
         layer2 = self.layer_2_conv1(layer2)
         layer2 = relu(layer2)
         layer2 = self.layer_2_conv2(layer2)
         layer2 = relu(layer2)
+        print(layer2.shape)
 
         layer3 = MaxPool2d(2, stride=2)(layer2)
         layer3 = self.layer_3_conv1(layer3)
         layer3 = relu(layer3)
         layer3 = self.layer_3_conv2(layer3)
         layer3 = relu(layer3)
+        print(layer3.shape)
 
         layer4 = MaxPool2d(2, stride=2)(layer3)
         layer4 = self.layer_4_conv1(layer4)
         layer4 = relu(layer4)
         layer4 = self.layer_4_conv2(layer4)
         layer4 = relu(layer4)
+        print(layer4.shape)
 
         layer5 = MaxPool2d(2, stride=2)(layer4)
         layer5 = self.layer_5_conv1(layer5)
         layer5 = relu(layer5)
         layer5 = self.layer_5_conv2(layer5)
         layer5 = relu(layer5)
+        print(layer5.shape)
 
         # Crops
         # TODO: needs te be modified to work for arbitrary input sizes
