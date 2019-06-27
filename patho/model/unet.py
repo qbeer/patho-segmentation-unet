@@ -37,47 +37,38 @@ class UNET(Module):
         layer1 = relu(layer1)
         layer1 = self.layer_1_conv2(layer1)
         layer1 = relu(layer1)
-        print(layer1.shape)
 
         layer2 = MaxPool2d(2, stride=2)(layer1)
         layer2 = self.layer_2_conv1(layer2)
         layer2 = relu(layer2)
         layer2 = self.layer_2_conv2(layer2)
         layer2 = relu(layer2)
-        print(layer2.shape)
 
         layer3 = MaxPool2d(2, stride=2)(layer2)
         layer3 = self.layer_3_conv1(layer3)
         layer3 = relu(layer3)
         layer3 = self.layer_3_conv2(layer3)
         layer3 = relu(layer3)
-        print(layer3.shape)
 
         layer4 = MaxPool2d(2, stride=2)(layer3)
         layer4 = self.layer_4_conv1(layer4)
         layer4 = relu(layer4)
         layer4 = self.layer_4_conv2(layer4)
         layer4 = relu(layer4)
-        print(layer4.shape)
 
         layer5 = MaxPool2d(2, stride=2)(layer4)
         layer5 = self.layer_5_conv1(layer5)
         layer5 = relu(layer5)
         layer5 = self.layer_5_conv2(layer5)
         layer5 = relu(layer5)
-        print(layer5.shape)
 
         # Crops
         # TODO: needs te be modified to work for arbitrary input sizes
         # TODO: these are from the original UNET paper: https://arxiv.org/abs/1505.04597
         layer1_crop = pad(layer1, (-90, -90, -90, -90))
         layer2_crop = pad(layer2, (-40, -40, -40, -40))
-        layer3_crop = pad(layer3, (-12, -12, -12, -12))
+        layer3_crop = pad(layer3, (-16, -16, -16, -16))
         layer4_crop = pad(layer4, (-4, -4, -4, -4))
-        print('layer1crop : ', layer1_crop.shape)
-        print('layer2crop : ', layer2_crop.shape)
-        print('layer3crop : ', layer3_crop.shape)
-        print('layer4crop : ', layer4_crop.shape)
 
         # Up forward pass
         up_layer_4 = interpolate(layer5, scale_factor=2, mode='bilinear', align_corners=True)
