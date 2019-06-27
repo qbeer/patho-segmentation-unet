@@ -8,7 +8,7 @@ class Model:
         self.criterion = CrossEntropyLoss()
         self.optimizer = Adam(self.net.parameters(), lr=1e-4)
 
-    def train(trainloader, EPOCH=100):
+    def train(self, trainloader, EPOCH=100):
         for epoch in range(EPOCH):
             
             running_loss = 0.0
