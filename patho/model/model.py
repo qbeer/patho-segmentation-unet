@@ -1,5 +1,5 @@
 from torch.nn import BCELoss
-from torch.optim import Adam
+from torch.optim import SGD
 import torch
 
 
@@ -9,7 +9,7 @@ class Model:
         self.net = net
         self.net.to(self.device)
         self.criterion = BCELoss()
-        self.optimizer = Adam(self.net.parameters(), lr=1e-2, momentum=0.9)
+        self.optimizer = SGD(self.net.parameters(), lr=1e-2, momentum=0.9)
 
     def train(self, trainloader, EPOCH=100):
         for epoch in range(EPOCH):
