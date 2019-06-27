@@ -5,7 +5,7 @@ import torch
 
 class Model:
     def __init__(self, net):
-        self.net = net
+        self.net = net.cuda()
         self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
         self.net.to(self.device)
         self.criterion = BCEWithLogitsLoss()
