@@ -10,14 +10,14 @@ class Model:
 
     def train(self, trainloader, EPOCH=100):
         for epoch in range(EPOCH):
-            
+
             running_loss = 0.0
             for ind, data in enumerate(trainloader, 0):
                 image, segmentation_map = data
-                
+
                 self.optimizer.zero_grad()
-                
-                output_maps = self.net(image)
+
+                output_map = self.net(image)
                 loss = self.criterion(output_map, segmentation_map)
                 loss.backward()
                 self.optimizer.step()
