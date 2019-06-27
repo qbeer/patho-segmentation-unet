@@ -75,12 +75,10 @@ class UNET(Module):
         layer3_crop = pad(layer3, (-12, -12, -12, -12))
         layer4_crop = pad(layer4, (-4, -4, -4, -4))
 
-        print(layer4.shape, layer4_crop.shape)
-
         # Up forward pass
         up_layer_4 = interpolate(layer5, scale_factor=2, mode='bilinear')
         print("after interpolate : ", up_layer_4.shape)
-        up_layer_4 = ConvTranspose2d(1024, 512, 2, padding_mode='same')(up_layer_4)
+        up_layer_4 = ConvTranspose2d(1024, 512, 2, output_padding=-1)(up_layer_4)
         print("after conv2dtrans : ", up_layer_4.shape)
         up_layer_4 = torch.cat((layer4_crop, up_layer_4), dim=0)
         up_layer_4 = self.uplayer_4_conv1(up_layer_4)
@@ -89,7 +87,7 @@ class UNET(Module):
         up_layer_4 = relu(up_layer_4)
 
         up_layer_3 = interpolate(up_layer_4, scale_factor=2, mode='bilinear')
-        up_layer_3 = ConvTranspose2d(512, 256, 2, padding_mode='same')(up_layer_3)
+        up_layer_3 = ConvTranspose2d(512, 256, 2, padding=1)(up_layer_3)
         up_layer_3 = torch.cat((layer3_crop, up_layer_3), dim=0)
         up_layer_3 = self.uplayer_3_conv1(up_layer_3)
         up_layer_3 = relu(up_layer_3)
@@ -97,7 +95,7 @@ class UNET(Module):
         up_layer_3 = relu(up_layer_3)
 
         up_layer_2 = interpolate(up_layer_3, scale_factor=2, mode='bilinear')
-        up_layer_2 = ConvTranspose2d(256, 128, 2, padding_mode='same')(up_layer_2)
+        up_layer_2 = ConvTranspose2d(256, 128, 2, padding=1)(up_layer_2)
         up_layer_2 = torch.cat((layer2_crop, up_layer_2), dim=0)
         up_layer_2 = self.uplayer_2_conv1(up_layer_2)
         up_layer_2 = relu(up_layer_2)
@@ -105,7 +103,7 @@ class UNET(Module):
         up_layer_2 = relu(up_layer_2)
 
         up_layer_1 = interpolate(up_layer_2, scale_factor=2, mode='bilinear')
-        up_layer_1 = ConvTranspose2d(128, 64, 2, padding_mode='same')(up_layer_1)
+        up_layer_1 = ConvTranspose2d(128, 64, 2, padding=1)(up_layer_1)
         up_layer_1 = torch.cat((layer1_crop, up_layer_1), dim=0)
         up_layer_1 = self.uplayer_1_conv1(up_layer_1)
         up_layer_1 = relu(up_layer_1)
