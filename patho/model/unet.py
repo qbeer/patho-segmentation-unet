@@ -78,12 +78,9 @@ class UNET(Module):
         layer3_crop = pad(layer3, (-16, -16, -16, -16))
         layer4_crop = pad(layer4, (-4, -4, -4, -4))
 
-        print("DONE!")
-
         # Up forward pass
         up_layer_4 = interpolate(
             layer5, scale_factor=2, mode='bilinear', align_corners=True)
-        print("DONE!")
         up_layer_4 = self.upconv_4(up_layer_4)
         up_layer_4 = torch.cat((layer4_crop, up_layer_4), dim=1)
         up_layer_4 = self.uplayer_4_conv1(up_layer_4)

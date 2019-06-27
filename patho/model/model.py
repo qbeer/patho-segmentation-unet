@@ -8,7 +8,6 @@ class Model:
         self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
         self.net = net
         self.net.to(self.device)
-        print("device : ", self.device)
         self.criterion = BCEWithLogitsLoss()
         self.optimizer = Adam(self.net.parameters(), lr=1e-4)
 
@@ -18,14 +17,10 @@ class Model:
             running_loss = 0.0
             for ind, (image, segmentation_map) in enumerate(trainloader, 0):
                 image, segmentation_map = image.to(self.device), segmentation_map.to(self.device)
-                print("Image shape : ", image.shape)
-                print("Segmentation shape : ", segmentation_map.shape)
-                print("device : ", self.device)
 
                 self.optimizer.zero_grad()
 
                 output_map = self.net(image)
-                print('output : ', output_map.shape, segmentation_map.shape)
                 loss = self.criterion(output_map, segmentation_map)
                 loss.backward()
                 self.optimizer.step()
