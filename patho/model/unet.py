@@ -74,6 +74,10 @@ class UNET(Module):
         layer2_crop = pad(layer2, (-40, -40, -40, -40))
         layer3_crop = pad(layer3, (-12, -12, -12, -12))
         layer4_crop = pad(layer4, (-4, -4, -4, -4))
+        print('layer1crop : ', layer1_crop.shape)
+        print('layer2crop : ', layer2_crop.shape)
+        print('layer3crop : ', layer3_crop.shape)
+        print('layer4crop : ', layer4_crop.shape)
 
         # Up forward pass
         up_layer_4 = interpolate(layer5, scale_factor=2, mode='bilinear', align_corners=True)
