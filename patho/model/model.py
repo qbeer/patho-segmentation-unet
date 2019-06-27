@@ -17,6 +17,9 @@ class Model:
             running_loss = 0.0
             for ind, (image, segmentation_map) in enumerate(trainloader, 0):
                 image, segmentation_map = image.to(self.device), segmentation_map.to(self.device)
+                print("Image shape : ", image.shape)
+                print("Segmentation shape : ", segmentation_map.shape)
+                print("device : ", self.device)
 
                 self.optimizer.zero_grad()
 
