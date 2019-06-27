@@ -79,6 +79,7 @@ class UNET(Module):
 
         # Up forward pass
         up_layer_4 = interpolate(layer5, scale_factor=2, mode='bilinear')
+        print(up_layer_4.shape)
         up_layer_4 = ConvTranspose2d(1024, 512, 2)(up_layer_4)
         print(up_layer_4.shape)
         up_layer_4 = torch.cat((layer4_crop, up_layer_4), dim=0)
