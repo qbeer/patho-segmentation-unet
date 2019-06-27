@@ -6,7 +6,8 @@ import torch
 class Model:
     def __init__(self, net):
         self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-        self.net = net.to(self.device)
+        self.net = net
+        self.net.to(self.device)
         self.criterion = BCEWithLogitsLoss()
         self.optimizer = Adam(self.net.parameters(), lr=1e-4)
 
@@ -14,8 +15,8 @@ class Model:
         for epoch in range(EPOCH):
 
             running_loss = 0.0
-            for ind, data in enumerate(trainloader, 0):
-                image, segmentation_map = data[0].to(self.device), data[1].to(self.device)
+            for ind, (image, segmentation_map) in enumerate(trainloader, 0):
+                image, segmentation_map = image.to(self.device), segmentation_map.to(self.device)
 
                 self.optimizer.zero_grad()
 
