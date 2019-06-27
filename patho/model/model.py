@@ -13,19 +13,19 @@ class Model:
             
             running_loss = 0.0
             for ind, data in enumerate(trainloader, 0):
-                images, segmentation_maps = data
+                image, segmentation_map = data
                 
-                optimizer.zero_grad()
+                self.optimizer.zero_grad()
                 
-                output_maps = self.net(images)
-                loss = self.criterion(output_maps, segmentation_maps)
+                output_maps = self.net(image)
+                loss = self.criterion(output_map, segmentation_map)
                 loss.backward()
                 self.optimizer.step()
 
                 running_loss += loss.item()
-                if i % 2000 == 1999:    # print every 2000 mini-batches
+                if i % 10 == 9:    # print every 10 mini-batches
                     print('[%d, %5d] loss: %.3f' %
-                          (epoch + 1, i + 1, running_loss / 2000))
+                          (epoch + 1, i + 1, running_loss / 10))
                     running_loss = 0.0
 
         print('Finished training!')
