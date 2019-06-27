@@ -5,7 +5,7 @@ import torch
 
 class Model:
     def __init__(self, net):
-        self.net = net.cuda()
+        self.net = net
         self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
         self.net.to(self.device)
         self.criterion = BCEWithLogitsLoss()
@@ -20,7 +20,7 @@ class Model:
 
                 self.optimizer.zero_grad()
 
-                output_map = self.net(image)
+                output_map = self.net(image.cuda())
                 print('output : ', output_map.shape, segmentation_map.shape)
                 loss = self.criterion(output_map, segmentation_map)
                 loss.backward()
