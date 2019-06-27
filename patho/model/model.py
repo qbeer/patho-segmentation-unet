@@ -18,6 +18,7 @@ class Model:
                 self.optimizer.zero_grad()
 
                 output_map = self.net(image)
+                print('output : ', output_map.shape, segmentation_map.shape)
                 loss = self.criterion(output_map, segmentation_map)
                 loss.backward()
                 self.optimizer.step()
