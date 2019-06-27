@@ -24,9 +24,9 @@ class Model:
                 self.optimizer.step()
 
                 running_loss += loss.item()
-                if i % 10 == 9:    # print every 10 mini-batches
+                if ind % 10 == 9:    # print every 10 mini-batches
                     print('[%d, %5d] loss: %.3f' %
-                          (epoch + 1, i + 1, running_loss / 10))
+                          (epoch + 1, ind + 1, running_loss / 10))
                     running_loss = 0.0
 
         print('Finished training!')
