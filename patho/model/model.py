@@ -1,11 +1,11 @@
-from torch.nn import CrossEntropyLoss
+from torch.nn import BCEWithLogitsLoss
 from torch.optim import Adam
 
 
 class Model:
     def __init__(self, net):
         self.net = net
-        self.criterion = CrossEntropyLoss()
+        self.criterion = BCEWithLogitsLoss()
         self.optimizer = Adam(self.net.parameters(), lr=1e-4)
 
     def train(self, trainloader, EPOCH=100):
