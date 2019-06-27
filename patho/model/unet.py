@@ -1,3 +1,4 @@
+from torch.nn import Module
 from torch.nn.functional import pad, relu, conv2d, conv_transpose2d, sigmoid, max_pool2d
 
 
