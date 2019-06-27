@@ -8,6 +8,7 @@ class Model:
         self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
         self.net = net
         self.net.to(self.device)
+        print("device : ", self.device)
         self.criterion = BCEWithLogitsLoss()
         self.optimizer = Adam(self.net.parameters(), lr=1e-4)
 
