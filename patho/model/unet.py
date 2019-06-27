@@ -9,7 +9,7 @@ class UNET(Module):
         self.layer_1_conv2 = Conv2d(64, 64, 3)
         self.uplayer_1_conv1 = Conv2d(128, 64, 3)
         self.uplayer_1_conv2 = Conv2d(64, 64, 3)
-        self.uplayer_1_conv3 = Conv2d(64, 64, 2)
+        self.uplayer_1_conv3 = Conv2d(64, 1, 1)
         # Layer 2
         self.layer_2_conv1 = Conv2d(64, 128, 3)
         self.layer_2_conv2 = Conv2d(128, 128, 3)
