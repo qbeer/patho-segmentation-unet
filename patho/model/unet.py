@@ -65,7 +65,7 @@ class UNET(Module):
         # Crops
         # TODO: needs te be modified to work for arbitrary input sizes
         # TODO: these are from the original UNET paper: https://arxiv.org/abs/1505.04597
-        layer1_crop = pad(layer1, (-90, -90, -90, -90))
+        layer1_crop = pad(layer1, (-88, -88, -88, -88))
         layer2_crop = pad(layer2, (-40, -40, -40, -40))
         layer3_crop = pad(layer3, (-16, -16, -16, -16))
         layer4_crop = pad(layer4, (-4, -4, -4, -4))
