@@ -21,7 +21,7 @@ class Model:
                 self.optimizer.zero_grad()
 
                 output_map = self.net(image)
-                loss = self.criterion(segmentation_map, output_map)
+                loss = self.criterion(output_map, segmentation_map)
                 loss.backward()
                 self.optimizer.step()
 
