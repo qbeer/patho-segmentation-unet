@@ -1,5 +1,6 @@
 from torch.nn import Module, Conv2d, ConvTranspose2d, MaxPool2d
 from torch.nn.functional import pad, relu, sigmoid
+import torch
 
 
 class UNET(Module):
