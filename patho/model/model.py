@@ -9,7 +9,7 @@ class Model:
         self.net = net
         self.net.to(self.device)
         self.criterion = BCELoss()
-        self.optimizer = Adam(self.net.parameters(), lr=1e-4)
+        self.optimizer = Adam(self.net.parameters(), lr=1e-2)
 
     def train(self, trainloader, EPOCH=100):
         for epoch in range(EPOCH):
@@ -21,7 +21,7 @@ class Model:
                 self.optimizer.zero_grad()
 
                 output_map = self.net(image)
-                loss = self.criterion(output_map, segmentation_map)
+                loss = self.criterion(segmentation_map, output_map)
                 loss.backward()
                 self.optimizer.step()
 
