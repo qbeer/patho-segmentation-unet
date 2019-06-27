@@ -1,10 +1,13 @@
 from torch.nn import BCEWithLogitsLoss
 from torch.optim import Adam
+import torch
 
 
 class Model:
     def __init__(self, net):
         self.net = net
+        device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+        self.net.to(device)
         self.criterion = BCEWithLogitsLoss()
         self.optimizer = Adam(self.net.parameters(), lr=1e-4)
 

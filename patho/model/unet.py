@@ -1,5 +1,5 @@
 from torch.nn import Module, Conv2d, ConvTranspose2d, MaxPool2d
-from torch.nn.functional import pad, relu, sigmoid, interpolate
+from torch.nn.functional import pad, relu, interpolate
 import torch
 
 
@@ -103,6 +103,6 @@ class UNET(Module):
         up_layer_1 = self.uplayer_1_conv2(up_layer_1)
         up_layer_1 = relu(up_layer_1)
         up_layer_1 = self.uplayer_1_conv3(up_layer_1)
-        output_layer = sigmoid(up_layer_1)
+        output_layer = torch.sigmoid(up_layer_1)
 
         return output_layer
