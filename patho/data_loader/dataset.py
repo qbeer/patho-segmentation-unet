@@ -21,11 +21,11 @@ class DataSet:
         mask_path = os.path.join(self.root, self.masks_path, self.masks[idx])
 
         img = Image.open(img_path).convert("RGB")
-        img = np.array(img).reshape(2, 0, 1) / 255.
+        img = np.array(img).transpose((2, 0, 1)) / 255.
         img = torch.as_tensor(img, dtype=torch.float32)
 
         mask = Image.open(mask_path).convert("L")
-        mask = np.array(mask).transpose(2, 0, 1) / 255.
+        mask = np.array(mask).transpose((2, 0, 1)) / 255.
         mask = torch.as_tensor(mask, dtype=torch.float32)
 
         if self.transforms is not None:
