@@ -1,4 +1,4 @@
-from torch.nn import Module, Conv2d, ConvTranspose2d, MaxPool2d
+from torch.nn import Module, Conv2d, ConvTranspose2d, MaxPool2d, DataParallel
 from torch.nn.functional import pad, relu, interpolate
 import torch
 
@@ -38,6 +38,36 @@ class UNET(Module):
         # Layer 5
         self.layer_5_conv1 = Conv2d(512, 1024, 3)
         self.layer_5_conv2 = Conv2d(1024, 1024, 3)
+
+    def make_parallel(self):
+        # Layer 1
+        self.layer_1_conv1 = DataParallel(self.layer_1_conv1)
+        self.layer_1_conv2 = DataParallel(self.layer_1_conv2)
+        self.uplayer_1_conv1 = DataParallel(self.uplayer_1_conv1)
+        self.uplayer_1_conv2 = DataParallel(self.uplayer_1_conv2)
+        self.uplayer_1_conv3 = DataParallel(self.uplayer_1_conv3)
+        self.upconv_1 = DataParallel(self.upconv_1)
+        # Layer 2
+        self.layer_2_conv1 = DataParallel(self.layer_2_conv1)
+        self.layer_2_conv2 = DataParallel(self.layer_2_conv2)
+        self.uplayer_2_conv1 = DataParallel(self.uplayer_2_conv1)
+        self.uplayer_2_conv2 = DataParallel(self.uplayer_2_conv2)
+        self.upconv_2 = DataParallel(self.upconv_2)
+        # Layer 3
+        self.layer_3_conv1 = DataParallel(self.layer_3_conv1)
+        self.layer_3_conv2 = DataParallel(self.layer_3_conv2)
+        self.uplayer_3_conv1 = DataParallel(self.uplayer_3_conv1)
+        self.uplayer_3_conv2 = DataParallel(self.uplayer_3_conv1)
+        self.upconv_3 = DataParallel(self.upconv_3)
+        # Layer 4
+        self.layer_4_conv1 = DataParallel(self.layer_4_conv1)
+        self.layer_4_conv2 = DataParallel(self.layer_4_conv2)
+        self.uplayer_4_conv1 = DataParallel(self.uplayer_4_conv1)
+        self.uplayer_4_conv2 = DataParallel(self.uplayer_4_conv1)
+        self.upconv_4 = DataParallel(self.upconv_4)
+        # Layer 5
+        self.layer_5_conv1 = DataParallel(self.layer_5_conv1)
+        self.layer_5_conv2 = DataParallel(self.layer_5_conv1)
 
     def forward(self, x):
         # Down forward pass
