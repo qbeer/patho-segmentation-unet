@@ -57,17 +57,17 @@ class UNET(Module):
         self.layer_3_conv1 = DataParallel(self.layer_3_conv1)
         self.layer_3_conv2 = DataParallel(self.layer_3_conv2)
         self.uplayer_3_conv1 = DataParallel(self.uplayer_3_conv1)
-        self.uplayer_3_conv2 = DataParallel(self.uplayer_3_conv1)
+        self.uplayer_3_conv2 = DataParallel(self.uplayer_3_conv2)
         self.upconv_3 = DataParallel(self.upconv_3)
         # Layer 4
         self.layer_4_conv1 = DataParallel(self.layer_4_conv1)
         self.layer_4_conv2 = DataParallel(self.layer_4_conv2)
         self.uplayer_4_conv1 = DataParallel(self.uplayer_4_conv1)
-        self.uplayer_4_conv2 = DataParallel(self.uplayer_4_conv1)
+        self.uplayer_4_conv2 = DataParallel(self.uplayer_4_conv2)
         self.upconv_4 = DataParallel(self.upconv_4)
         # Layer 5
         self.layer_5_conv1 = DataParallel(self.layer_5_conv1)
-        self.layer_5_conv2 = DataParallel(self.layer_5_conv1)
+        self.layer_5_conv2 = DataParallel(self.layer_5_conv2)
 
     def forward(self, x):
         # Down forward pass
