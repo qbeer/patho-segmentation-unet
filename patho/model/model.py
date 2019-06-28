@@ -1,27 +1,30 @@
-from torch.nn import BCELoss
+from ..custom_loss import BCELossWithJaccard
 from torch.optim import SGD
 import torch
 
 
 class Model:
-    def __init__(self, net):
-        self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+    def __init__(self, net, lr=1e-3):
+        self.device = torch.device(
+            'cuda') if torch.cuda.is_available() else torch.device('cpu')
         self.net = net
         self.net.to(self.device)
-        self.criterion = BCELoss()
-        self.optimizer = SGD(self.net.parameters(), lr=1e-2, momentum=0.9)
+        self.criterion = BCELossWithJaccard()
+        self.optimizer = SGD(self.net.parameters(), lr=lr, momentum=0.9)
 
-    def train(self, trainloader, EPOCH=100):
+    def train(self, data_loader, EPOCH=100):
         for epoch in range(EPOCH):
 
             running_loss = 0.0
-            for ind, (image, segmentation_map) in enumerate(trainloader, 0):
-                image, segmentation_map = image.to(self.device), segmentation_map.to(self.device)
+            for ind, (image, segmentation_map) in enumerate(data_loader, 0):
+                image, segmentation_map = image.to(
+                    self.device), segmentation_map.to(self.device)
 
                 self.optimizer.zero_grad()
 
                 output_map = self.net(image)
-                loss = self.criterion(output_map.view(-1), segmentation_map.view(-1))
+                loss = self.criterion(
+                    output_map.view(-1), segmentation_map.view(-1))
                 loss.backward()
                 self.optimizer.step()
 
