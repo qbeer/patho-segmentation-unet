@@ -3,7 +3,6 @@ import os
 from PIL import Image
 import torch
 
-
 class DataSet:
     def __init__(self, root, images_path, masks_path, transforms=None):
         self.root = root
@@ -21,7 +20,13 @@ class DataSet:
         mask_path = os.path.join(self.root, self.masks_path, self.masks[idx])
 
         img = Image.open(img_path).convert("RGB")
-        np_img = np.array(img).reshape(572, 572, 3)
+        img = img.resize((388, 388), Image.ANTIALIAS)
+
+        img.thumbnail((572, 572), Image.ANTIALIAS)
+        back = Image.new("RGB", (572, 572), "white")
+        back.paste(img, (92, 92))
+
+        np_img = np.array(back).reshape(572, 572, 3)
         img = np_img.transpose((2, 0, 1)) / 255.
         img = torch.as_tensor(img, dtype=torch.float32)
 
