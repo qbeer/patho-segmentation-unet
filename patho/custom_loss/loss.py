@@ -12,8 +12,7 @@ class BCELossWithJaccard(Module):
         super(BCELossWithJaccard, self).__init__()
 
     def forward(self, x, y):
-        bce = BCELoss()
-        loss1 = bce(x, y)
-        xy_ = x_*y_
-        loss2 = torch.mean(xy_ / (x_ + y_ - xy_))
-        return loss1 - torch.log(loss2 + 1e-12)
+        bce = BCELoss()(x, y)
+        xy = x*y
+        jaccard = torch.mean(xy / (x + y - xy))
+        return bce - torch.log(jaccard + 1e-12)
