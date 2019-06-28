@@ -1,15 +1,18 @@
 from ..custom_loss import BCELossWithJaccard
+from torch.nn import BCELoss
 from torch.optim import SGD
 import torch
 
 
 class Model:
-    def __init__(self, net, lr=1e-3):
+    def __init__(self, net, lr=1e-3, with_jaccard=False):
         self.device = torch.device(
             'cuda') if torch.cuda.is_available() else torch.device('cpu')
         self.net = net
         self.net.to(self.device)
-        self.criterion = BCELossWithJaccard()
+        self.criterion = BCELoss()
+        if with_jaccard:
+            self.criterion = BCELossWithJaccard()
         self.optimizer = SGD(self.net.parameters(), lr=lr, momentum=0.9)
 
     def train(self, data_loader, EPOCH=100):
