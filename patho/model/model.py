@@ -1,6 +1,7 @@
 from ..custom_loss import BCELossWithJaccard
 from torch.nn import BCELoss
 from torch.optim import SGD
+from ..model import UNET
 import torch
 import os
 
@@ -11,10 +12,10 @@ class Model:
             'cuda') if torch.cuda.is_available() else torch.device('cpu')
         self.net = net
         if load_model:
-            self.net.load_state_dict(
-                torch.load("patho/data/model.pt"))
-        if not load_model:
-            self.net.to(self.device)
+            self.net = UNET()
+            self.net.load_state_dict(torch.load("patho/data/model.pt"))
+            self.net.eval()
+        self.net.to(self.device)
         self.criterion = BCELoss()
         if with_jaccard:
             self.criterion = BCELossWithJaccard()
