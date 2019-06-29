@@ -13,8 +13,13 @@ class Model:
         self.net = net
         if load_model:
             self.net = UNET()
-            self.net.load_state_dict(torch.load("patho/data/model.pt"))
-            self.net.eval()
+            try:
+                self.net.load_state_dict(torch.load("patho/data/model.pt"))
+            except RuntimeError:
+                self.net.make_parallel()
+                self.net.load_state_dict(torch.load("patho/data/model.pt"))
+            finally:
+                self.net.eval()
         self.net.to(self.device)
         self.criterion = BCELoss()
         if with_jaccard:
