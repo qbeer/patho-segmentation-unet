@@ -12,7 +12,7 @@ class Model:
         self.net = net
         if load_model:
             self.net = self.net.load_state_dict(
-                torch.load(os.join("patho/data", "model.pth")))
+                torch.load("patho/data/model.pt"))
         self.net.to(self.device)
         self.criterion = BCELoss()
         if with_jaccard:
@@ -45,5 +45,5 @@ class Model:
             loss_on_epoch_end /= (ind + 1)  # batch average loss
             print("Average batch loss on epoch end : %.5f" % loss_on_epoch_end)
 
-        torch.save(self.net.state_dict(), os.join("patho/data", "model.pth"))
+        torch.save(self.net.state_dict(), "patho/data/model.pt")
         print('Finished training!')
