@@ -1,13 +1,13 @@
 from ..custom_loss import BCELossWithJaccard
 from torch.nn import BCELoss
-from torch.optim import SGD
+from torch.optim import Adamax
 from ..model import UNET
 import torch
 import os
 
 
 class Model:
-    def __init__(self, net, lr=1e-3, with_jaccard=False, load_model=False):
+    def __init__(self, net, lr=5e-3, with_jaccard=False, load_model=False):
         self.device = torch.device(
             'cuda') if torch.cuda.is_available() else torch.device('cpu')
         self.net = net
@@ -24,7 +24,7 @@ class Model:
         self.criterion = BCELoss()
         if with_jaccard:
             self.criterion = BCELossWithJaccard()
-        self.optimizer = SGD(self.net.parameters(), lr=lr, momentum=0.9)
+        self.optimizer = Adamax(self.net.parameters(), lr=lr)
 
     def train(self, data_loader, EPOCH=100):
         for epoch in range(EPOCH):
