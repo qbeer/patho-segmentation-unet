@@ -2,13 +2,17 @@ from ..custom_loss import BCELossWithJaccard
 from torch.nn import BCELoss
 from torch.optim import SGD
 import torch
+import os
 
 
 class Model:
-    def __init__(self, net, lr=1e-3, with_jaccard=False):
+    def __init__(self, net, lr=1e-3, with_jaccard=False, load_model=False):
         self.device = torch.device(
             'cuda') if torch.cuda.is_available() else torch.device('cpu')
         self.net = net
+        if load_model:
+            self.net = self.net.load_state_dict(
+                torch.load(os.join("patho/data", "model.pth")))
         self.net.to(self.device)
         self.criterion = BCELoss()
         if with_jaccard:
@@ -38,7 +42,8 @@ class Model:
                     print('[%d, %5d] loss: %.3f' %
                           (epoch + 1, ind + 1, running_loss / 10))
                     running_loss = 0.0
-            loss_on_epoch_end /= (ind + 1) # batch average loss
+            loss_on_epoch_end /= (ind + 1)  # batch average loss
             print("Average batch loss on epoch end : %.5f" % loss_on_epoch_end)
 
+        torch.save(self.net.state_dict(), os.join("patho/data", "model.pth"))
         print('Finished training!')
