@@ -20,14 +20,14 @@ class DataSet:
         mask_path = os.path.join(self.root, self.masks_path, self.masks[idx])
 
         img = Image.open(img_path).convert("RGB")
-        img = img.resize((388, 388), Image.ANTIALIAS)
+        img.thumbnail((388, 388), Image.ANTIALIAS)
 
-        img.thumbnail((572, 572), Image.ANTIALIAS)
-        back = Image.new("RGB", (572, 572), "white")
-        back.paste(img, (92, 92))
-
-        np_img = np.array(back).reshape(572, 572, 3)
-        img = np_img.transpose((2, 0, 1)) / 255.
+        white_background = Image.new("RGB", (572, 572), "white")
+        white_background.paste(img, (92, 92))
+        
+        img_on_white_background = np.array(white_background).reshape(572, 572, 3)
+        
+        img = img_on_white_background.transpose((2, 0, 1)) / 255.
         img = torch.as_tensor(img, dtype=torch.float32)
 
         mask = Image.open(mask_path).convert("L")
