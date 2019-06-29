@@ -26,7 +26,7 @@ class Model:
             self.criterion = BCELossWithJaccard()
         self.optimizer = SGD(self.net.parameters(), lr=lr, momentum=0.99)
 
-    def train(self, data_loader, EPOCH=100):
+    def train(self, data_loader, EPOCH=10):
         for epoch in range(EPOCH):
 
             loss_on_epoch_end = 0.0
@@ -50,7 +50,7 @@ class Model:
                           (epoch + 1, ind + 1, running_loss / 10))
                     running_loss = 0.0
             loss_on_epoch_end /= (ind + 1)  # batch average loss
-            print("Average batch loss on epoch end : %.5f" % loss_on_epoch_end)
+            print("Average 10-batch loss on epoch end : %.5f" % loss_on_epoch_end)
 
         torch.save(self.net.state_dict(), "patho/data/model.pt")
         print('Finished training!')
