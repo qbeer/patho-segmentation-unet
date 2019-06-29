@@ -10,10 +10,11 @@ class Model:
         self.device = torch.device(
             'cuda') if torch.cuda.is_available() else torch.device('cpu')
         self.net = net
-        self.net.to(self.device)
         if load_model:
             self.net.load_state_dict(
                 torch.load("patho/data/model.pt"))
+        if not load_model:
+            self.net.to(self.device)
         self.criterion = BCELoss()
         if with_jaccard:
             self.criterion = BCELossWithJaccard()
