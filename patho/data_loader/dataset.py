@@ -31,6 +31,7 @@ class DataSet:
         img = torch.as_tensor(img, dtype=torch.float32)
 
         mask = Image.open(mask_path).convert("L")
+        mask.thumbnail((388, 388), Image.ANTIALIAS)
         np_mask = np.array(mask).reshape(388, 388, 1)
         mask = np_mask.transpose((2, 0, 1)) / 255.
         mask = torch.as_tensor(mask, dtype=torch.float32)
