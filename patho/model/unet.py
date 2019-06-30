@@ -1,5 +1,5 @@
-from torch.nn import Module, Conv2d, ConvTranspose2d, MaxPool2d, DataParallel
-from torch.nn.functional import pad, relu, interpolate, batch_norm
+from torch.nn import Module, Conv2d, ConvTranspose2d, MaxPool2d, BatchNorm2d, DataParallel
+from torch.nn.functional import pad, relu, interpolate
 import torch
 
 
@@ -9,6 +9,7 @@ class UNET(Module):
         # Layer 1
         self.layer_1_conv1 = Conv2d(input_shape[-1], 64, 3)
         self.layer_1_conv2 = Conv2d(64, 64, 3)
+        self.batch_norm_1 = BatchNorm2d(64)
         self.uplayer_1_conv1 = Conv2d(128, 64, 3)
         self.uplayer_1_conv2 = Conv2d(64, 64, 3)
         self.uplayer_1_conv3 = Conv2d(64, 1, 1)
@@ -17,6 +18,7 @@ class UNET(Module):
         # Layer 2
         self.layer_2_conv1 = Conv2d(64, 128, 3)
         self.layer_2_conv2 = Conv2d(128, 128, 3)
+        self.batch_norm_2 = BatchNorm2d(128)
         self.uplayer_2_conv1 = Conv2d(256, 128, 3)
         self.uplayer_2_conv2 = Conv2d(128, 128, 3)
         self.upconv_2 = ConvTranspose2d(
@@ -24,6 +26,7 @@ class UNET(Module):
         # Layer 3
         self.layer_3_conv1 = Conv2d(128, 256, 3)
         self.layer_3_conv2 = Conv2d(256, 256, 3)
+        self.batch_norm_3 = BatchNorm2d(256)
         self.uplayer_3_conv1 = Conv2d(512, 256, 3)
         self.uplayer_3_conv2 = Conv2d(256, 256, 3)
         self.upconv_3 = ConvTranspose2d(
@@ -31,6 +34,7 @@ class UNET(Module):
         # Layer 4
         self.layer_4_conv1 = Conv2d(256, 512, 3)
         self.layer_4_conv2 = Conv2d(512, 512, 3)
+        self.batch_norm_4 = BatchNorm2d(512)
         self.uplayer_4_conv1 = Conv2d(1024, 512, 3)
         self.uplayer_4_conv2 = Conv2d(512, 512, 3)
         self.upconv_4 = ConvTranspose2d(
@@ -38,11 +42,13 @@ class UNET(Module):
         # Layer 5
         self.layer_5_conv1 = Conv2d(512, 1024, 3)
         self.layer_5_conv2 = Conv2d(1024, 1024, 3)
+        self.batch_norm_5 = BatchNorm2d(1024)
 
     def make_parallel(self):
         # Layer 1
         self.layer_1_conv1 = DataParallel(self.layer_1_conv1)
         self.layer_1_conv2 = DataParallel(self.layer_1_conv2)
+        self.batch_norm_1 = DataParallel(self.batch_norm_1)
         self.uplayer_1_conv1 = DataParallel(self.uplayer_1_conv1)
         self.uplayer_1_conv2 = DataParallel(self.uplayer_1_conv2)
         self.uplayer_1_conv3 = DataParallel(self.uplayer_1_conv3)
@@ -50,24 +56,28 @@ class UNET(Module):
         # Layer 2
         self.layer_2_conv1 = DataParallel(self.layer_2_conv1)
         self.layer_2_conv2 = DataParallel(self.layer_2_conv2)
+        self.batch_norm_2 = DataParallel(self.batch_norm_2)
         self.uplayer_2_conv1 = DataParallel(self.uplayer_2_conv1)
         self.uplayer_2_conv2 = DataParallel(self.uplayer_2_conv2)
         self.upconv_2 = DataParallel(self.upconv_2)
         # Layer 3
         self.layer_3_conv1 = DataParallel(self.layer_3_conv1)
         self.layer_3_conv2 = DataParallel(self.layer_3_conv2)
+        self.batch_norm_3 = DataParallel(self.batch_norm_3)
         self.uplayer_3_conv1 = DataParallel(self.uplayer_3_conv1)
         self.uplayer_3_conv2 = DataParallel(self.uplayer_3_conv2)
         self.upconv_3 = DataParallel(self.upconv_3)
         # Layer 4
         self.layer_4_conv1 = DataParallel(self.layer_4_conv1)
         self.layer_4_conv2 = DataParallel(self.layer_4_conv2)
+        self.batch_norm_4 = DataParallel(self.batch_norm_4)
         self.uplayer_4_conv1 = DataParallel(self.uplayer_4_conv1)
         self.uplayer_4_conv2 = DataParallel(self.uplayer_4_conv2)
         self.upconv_4 = DataParallel(self.upconv_4)
         # Layer 5
         self.layer_5_conv1 = DataParallel(self.layer_5_conv1)
         self.layer_5_conv2 = DataParallel(self.layer_5_conv2)
+        self.batch_norm_5 = DataParallel(self.batch_norm_5)
 
     def forward(self, x):
         # Down forward pass
@@ -75,35 +85,35 @@ class UNET(Module):
         layer1 = relu(layer1)
         layer1 = self.layer_1_conv2(layer1)
         layer1 = relu(layer1)
-        layer1 = batch_norm(layer1, training=True)
+        layer1 = self.batch_norm_1(layer1)
 
         layer2 = MaxPool2d(2, stride=2)(layer1)
         layer2 = self.layer_2_conv1(layer2)
         layer2 = relu(layer2)
         layer2 = self.layer_2_conv2(layer2)
         layer2 = relu(layer2)
-        layer2 = batch_norm(layer2, training=True)
+        layer2 = self.batch_norm_2(layer2)
 
         layer3 = MaxPool2d(2, stride=2)(layer2)
         layer3 = self.layer_3_conv1(layer3)
         layer3 = relu(layer3)
         layer3 = self.layer_3_conv2(layer3)
         layer3 = relu(layer3)
-        layer3 = batch_norm(layer3, training=True)
+        layer3 = self.batch_norm_3(layer3)
 
         layer4 = MaxPool2d(2, stride=2)(layer3)
         layer4 = self.layer_4_conv1(layer4)
         layer4 = relu(layer4)
         layer4 = self.layer_4_conv2(layer4)
         layer4 = relu(layer4)
-        layer4 = batch_norm(layer4, training=True)
+        layer4 = self.batch_norm_4(layer4)
 
         layer5 = MaxPool2d(2, stride=2)(layer4)
         layer5 = self.layer_5_conv1(layer5)
         layer5 = relu(layer5)
         layer5 = self.layer_5_conv2(layer5)
         layer5 = relu(layer5)
-        layer5 = batch_norm(layer5, training=True)
+        layer5 = self.batch_norm_5(layer5)
 
         # Crops
         # TODO: needs te be modified to work for arbitrary input sizes
@@ -122,7 +132,6 @@ class UNET(Module):
         up_layer_4 = relu(up_layer_4)
         up_layer_4 = self.uplayer_4_conv2(up_layer_4)
         up_layer_4 = relu(up_layer_4)
-        up_layer_4 = batch_norm(up_layer_4, training=True)
 
         up_layer_3 = interpolate(
             up_layer_4, scale_factor=2, mode='bilinear', align_corners=True)
@@ -132,7 +141,6 @@ class UNET(Module):
         up_layer_3 = relu(up_layer_3)
         up_layer_3 = self.uplayer_3_conv2(up_layer_3)
         up_layer_3 = relu(up_layer_3)
-        up_layer_3 = batch_norm(up_layer_3, training=True)
 
         up_layer_2 = interpolate(
             up_layer_3, scale_factor=2, mode='bilinear', align_corners=True)
@@ -142,7 +150,6 @@ class UNET(Module):
         up_layer_2 = relu(up_layer_2)
         up_layer_2 = self.uplayer_2_conv2(up_layer_2)
         up_layer_2 = relu(up_layer_2)
-        up_layer_2 = batch_norm(up_layer_2, training=True)
 
         up_layer_1 = interpolate(
             up_layer_2, scale_factor=2, mode='bilinear', align_corners=True)
