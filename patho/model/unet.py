@@ -1,5 +1,5 @@
 from torch.nn import Module, Conv2d, ConvTranspose2d, MaxPool2d, DataParallel
-from torch.nn.functional import pad, relu, interpolate
+from torch.nn.functional import pad, relu, interpolate, batch_norm
 import torch
 
 
@@ -75,30 +75,35 @@ class UNET(Module):
         layer1 = relu(layer1)
         layer1 = self.layer_1_conv2(layer1)
         layer1 = relu(layer1)
+        layer1 = batch_norm(layer1)
 
         layer2 = MaxPool2d(2, stride=2)(layer1)
         layer2 = self.layer_2_conv1(layer2)
         layer2 = relu(layer2)
         layer2 = self.layer_2_conv2(layer2)
         layer2 = relu(layer2)
+        layer2 = batch_norm(layer2)
 
         layer3 = MaxPool2d(2, stride=2)(layer2)
         layer3 = self.layer_3_conv1(layer3)
         layer3 = relu(layer3)
         layer3 = self.layer_3_conv2(layer3)
         layer3 = relu(layer3)
+        layer3 = batch_norm(layer3)
 
         layer4 = MaxPool2d(2, stride=2)(layer3)
         layer4 = self.layer_4_conv1(layer4)
         layer4 = relu(layer4)
         layer4 = self.layer_4_conv2(layer4)
         layer4 = relu(layer4)
+        layer4 = batch_norm(layer4)
 
         layer5 = MaxPool2d(2, stride=2)(layer4)
         layer5 = self.layer_5_conv1(layer5)
         layer5 = relu(layer5)
         layer5 = self.layer_5_conv2(layer5)
         layer5 = relu(layer5)
+        layer5 = batch_norm(layer5)
 
         # Crops
         # TODO: needs te be modified to work for arbitrary input sizes
@@ -117,6 +122,7 @@ class UNET(Module):
         up_layer_4 = relu(up_layer_4)
         up_layer_4 = self.uplayer_4_conv2(up_layer_4)
         up_layer_4 = relu(up_layer_4)
+        up_layer_4 = batch_norm(up_layer_4)
 
         up_layer_3 = interpolate(
             up_layer_4, scale_factor=2, mode='bilinear', align_corners=True)
@@ -126,6 +132,7 @@ class UNET(Module):
         up_layer_3 = relu(up_layer_3)
         up_layer_3 = self.uplayer_3_conv2(up_layer_3)
         up_layer_3 = relu(up_layer_3)
+        up_layer_3 = batch_norm(up_layer_3)
 
         up_layer_2 = interpolate(
             up_layer_3, scale_factor=2, mode='bilinear', align_corners=True)
@@ -135,6 +142,7 @@ class UNET(Module):
         up_layer_2 = relu(up_layer_2)
         up_layer_2 = self.uplayer_2_conv2(up_layer_2)
         up_layer_2 = relu(up_layer_2)
+        up_layer_2 = batch_norm(up_layer_2)
 
         up_layer_1 = interpolate(
             up_layer_2, scale_factor=2, mode='bilinear', align_corners=True)
