@@ -14,12 +14,8 @@ class BCELossWithJaccard(Module):
     def forward(self, x, y):
         bce = BCELoss()(x, y)
         # One-hot encode
-        x_ = x
-        y_ = y
-        x_[x_ >= 0.5] = 1.
-        x_[x_ < 0.5] = 0.
-        y_[y_ >= 0.5] = 1.
-        y_[y_ < 0.5] = 0.
+        x_ = 1. if x[x >= 0.5] else 0.
+        y_ = 1. if y[y >= 0.5] else 0.
         xy_ = x_*y_
         jaccard = torch.mean(xy_ / (x_ + y_ - xy_))
         return bce - torch.log(jaccard + 1e-12)
