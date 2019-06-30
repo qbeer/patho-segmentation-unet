@@ -1,6 +1,6 @@
 from ..custom_loss import BCELossWithJaccard
 from torch.nn import BCELoss
-from torch.optim import RMSprop
+from torch.optim import SGD
 from ..model import UNET
 import torch
 import os
@@ -24,7 +24,7 @@ class Model:
         self.criterion = BCELoss()
         if with_jaccard:
             self.criterion = BCELossWithJaccard()
-        self.optimizer = RMSprop(self.net.parameters(), lr=lr, momentum=0.99)
+        self.optimizer = SGD(self.net.parameters(), lr=lr, momentum=0.99)
 
     def train(self, data_loader, EPOCH=10):
         for epoch in range(EPOCH):
