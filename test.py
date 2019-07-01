@@ -1,7 +1,12 @@
 from patho import Model, UNET, DataLoader
+import torchvision.transforms as tf
+from torchvision.transforms import RandomHorizontalFlip, RandomVerticalFlip, ColorJitter, ToPILImage, ToTensor
 
-data_loader = DataLoader("patho/data", "resized_images",
-                         "resized_masks", batch_size=1).getInstance()
+trans = tf.Compose([RandomHorizontalFlip(), RandomVerticalFlip(),
+                    ColorJitter()])
+
+data_loader = DataLoader("patho/data/crc", "images",
+                         "masks", batch_size=1, transforms=trans).getInstance()
 
 unet = UNET()
 model = Model(unet)

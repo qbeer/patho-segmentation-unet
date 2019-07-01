@@ -2,6 +2,8 @@ import numpy as np
 import os
 from PIL import Image
 import torch
+import random
+
 
 class DataSet:
     def __init__(self, root, images_path, masks_path, transforms):
@@ -24,21 +26,29 @@ class DataSet:
 
         white_background = Image.new("RGB", (572, 572), "white")
         white_background.paste(img, (92, 92))
-        
-        img_on_white_background = np.array(white_background).reshape(572, 572, 3)
-        
-        img = img_on_white_background.transpose((2, 0, 1)) / 255.
-        img = torch.as_tensor(img, dtype=torch.float32)
 
         mask = Image.open(mask_path).convert("L")
         mask.thumbnail((388, 388), Image.ANTIALIAS)
+
+        seed = np.random.randint(2147483647)
+        random.seed(seed)
+        if self.transforms is not None:
+            img = self.transforms(img)
+
+        random.seed(seed)
+        if self.transforms is not None:
+            mask = self.transforms(mask)
+
+        img_on_white_background = np.array(
+            white_background).reshape(572, 572, 3)
+        img = img_on_white_background.transpose((2, 0, 1)) / 255.
+
         np_mask = np.array(mask).reshape(388, 388, 1)
         mask = np_mask.transpose((2, 0, 1)) / 255.
+
+        img = torch.as_tensor(img, dtype=torch.float32)
         mask = torch.as_tensor(mask, dtype=torch.float32)
-
-        if self.transforms is not None:
-            img, mask = self.transforms(img, mask)
-
+        
         return img, mask
 
     def __len__(self):
