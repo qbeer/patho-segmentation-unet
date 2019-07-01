@@ -1,4 +1,2 @@
 Pipfile.lock
 .vscode
-patho/data/crc/images/*
-patho/data/crc/masks/*
