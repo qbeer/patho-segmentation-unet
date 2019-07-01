@@ -4,7 +4,7 @@ from PIL import Image
 import torch
 
 class DataSet:
-    def __init__(self, root, images_path, masks_path, transforms=None):
+    def __init__(self, root, images_path, masks_path, transforms):
         self.root = root
         self.images_path = images_path
         self.masks_path = masks_path
