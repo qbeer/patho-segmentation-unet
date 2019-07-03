@@ -26,7 +26,6 @@ class Model:
         if with_jaccard:
             self.criterion = BCELossWithJaccard()
         self.optimizer = SGD(self.net.parameters(), lr=lr, momentum=0.99)
-        self.scheduler = StepLR(self.optimizer, step_size=50, gamma=0.1)
 
     def train(self, data_loader, EPOCH=10):
         for epoch in range(EPOCH):
@@ -37,13 +36,13 @@ class Model:
                 image, segmentation_map = image.to(
                     self.device), segmentation_map.to(self.device)
 
-                self.scheduler.zero_grad()
+                self.optimizer.zero_grad()
 
                 output_map = self.net(image)
                 loss = self.criterion(
                     output_map.view(-1), segmentation_map.view(-1))
                 loss.backward()
-                self.scheduler.step()
+                self.optimizer.step()
 
                 running_loss += loss.item()
                 loss_on_epoch_end += loss.item()
