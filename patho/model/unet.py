@@ -115,7 +115,7 @@ class UNET(Module):
 
         layer4 = MaxPool2d(2, stride=2)(layer3)
         layer4 = self.layer_4_conv1(layer4)
-        layer3 = self.batch_norm_4_1(layer4)
+        layer4 = self.batch_norm_4_1(layer4)
         layer4 = relu(layer4)
         layer4 = self.layer_4_conv2(layer4)
         layer4 = self.batch_norm_4_2(layer4)
