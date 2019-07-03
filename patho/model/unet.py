@@ -129,12 +129,6 @@ class UNET(Module):
         layer5 = self.batch_norm_5_2(layer5)
         layer5 = relu(layer5)
 
-        print(layer1.shape)
-        print(layer2.shape)
-        print(layer3.shape)
-        print(layer4.shape)
-        print(layer5.shape)
-
         # Crops
         # TODO: needs te be modified to work for arbitrary input sizes
         # TODO: these are from the original UNET paper: https://arxiv.org/abs/1505.04597
