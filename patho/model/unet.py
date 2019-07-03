@@ -9,7 +9,8 @@ class UNET(Module):
         # Layer 1
         self.layer_1_conv1 = Conv2d(input_shape[-1], 64, 3)
         self.layer_1_conv2 = Conv2d(64, 64, 3)
-        self.batch_norm_1 = BatchNorm2d(64)
+        self.batch_norm_1_1 = BatchNorm2d(64)
+        self.batch_norm_1_2 = BatchNorm2d(64)
         self.uplayer_1_conv1 = Conv2d(128, 64, 3)
         self.uplayer_1_conv2 = Conv2d(64, 64, 3)
         self.uplayer_1_conv3 = Conv2d(64, 1, 1)
@@ -18,7 +19,8 @@ class UNET(Module):
         # Layer 2
         self.layer_2_conv1 = Conv2d(64, 128, 3)
         self.layer_2_conv2 = Conv2d(128, 128, 3)
-        self.batch_norm_2 = BatchNorm2d(128)
+        self.batch_norm_2_1 = BatchNorm2d(128)
+        self.batch_norm_2_2 = BatchNorm2d(128)
         self.uplayer_2_conv1 = Conv2d(256, 128, 3)
         self.uplayer_2_conv2 = Conv2d(128, 128, 3)
         self.upconv_2 = ConvTranspose2d(
@@ -26,7 +28,8 @@ class UNET(Module):
         # Layer 3
         self.layer_3_conv1 = Conv2d(128, 256, 3)
         self.layer_3_conv2 = Conv2d(256, 256, 3)
-        self.batch_norm_3 = BatchNorm2d(256)
+        self.batch_norm_3_1 = BatchNorm2d(256)
+        self.batch_norm_3_2 = BatchNorm2d(256)
         self.uplayer_3_conv1 = Conv2d(512, 256, 3)
         self.uplayer_3_conv2 = Conv2d(256, 256, 3)
         self.upconv_3 = ConvTranspose2d(
@@ -34,7 +37,8 @@ class UNET(Module):
         # Layer 4
         self.layer_4_conv1 = Conv2d(256, 512, 3)
         self.layer_4_conv2 = Conv2d(512, 512, 3)
-        self.batch_norm_4 = BatchNorm2d(512)
+        self.batch_norm_4_1 = BatchNorm2d(512)
+        self.batch_norm_4_2 = BatchNorm2d(512)
         self.uplayer_4_conv1 = Conv2d(1024, 512, 3)
         self.uplayer_4_conv2 = Conv2d(512, 512, 3)
         self.upconv_4 = ConvTranspose2d(
@@ -42,78 +46,88 @@ class UNET(Module):
         # Layer 5
         self.layer_5_conv1 = Conv2d(512, 1024, 3)
         self.layer_5_conv2 = Conv2d(1024, 1024, 3)
-        self.batch_norm_5 = BatchNorm2d(1024)
+        self.batch_norm_5_1 = BatchNorm2d(1024)
+        self.batch_norm_5_2 = BatchNorm2d(1024)
 
     def make_parallel(self):
         # Layer 1
         self.layer_1_conv1 = DataParallel(self.layer_1_conv1)
         self.layer_1_conv2 = DataParallel(self.layer_1_conv2)
-        self.batch_norm_1 = DataParallel(self.batch_norm_1)
         self.uplayer_1_conv1 = DataParallel(self.uplayer_1_conv1)
         self.uplayer_1_conv2 = DataParallel(self.uplayer_1_conv2)
         self.uplayer_1_conv3 = DataParallel(self.uplayer_1_conv3)
         self.upconv_1 = DataParallel(self.upconv_1)
+        self.batch_norm_1_1 = DataParallel(self.batch_norm_1_1)
+        self.batch_norm_1_2 = DataParallel(self.batch_norm_1_2)
         # Layer 2
         self.layer_2_conv1 = DataParallel(self.layer_2_conv1)
         self.layer_2_conv2 = DataParallel(self.layer_2_conv2)
-        self.batch_norm_2 = DataParallel(self.batch_norm_2)
         self.uplayer_2_conv1 = DataParallel(self.uplayer_2_conv1)
         self.uplayer_2_conv2 = DataParallel(self.uplayer_2_conv2)
         self.upconv_2 = DataParallel(self.upconv_2)
+        self.batch_norm_2_1 = DataParallel(self.batch_norm_2_1)
+        self.batch_norm_2_2 = DataParallel(self.batch_norm_2_2)
         # Layer 3
         self.layer_3_conv1 = DataParallel(self.layer_3_conv1)
         self.layer_3_conv2 = DataParallel(self.layer_3_conv2)
-        self.batch_norm_3 = DataParallel(self.batch_norm_3)
         self.uplayer_3_conv1 = DataParallel(self.uplayer_3_conv1)
         self.uplayer_3_conv2 = DataParallel(self.uplayer_3_conv2)
         self.upconv_3 = DataParallel(self.upconv_3)
+        self.batch_norm_3_1 = DataParallel(self.batch_norm_3_1)
+        self.batch_norm_3_2 = DataParallel(self.batch_norm_3_2)
         # Layer 4
         self.layer_4_conv1 = DataParallel(self.layer_4_conv1)
         self.layer_4_conv2 = DataParallel(self.layer_4_conv2)
-        self.batch_norm_4 = DataParallel(self.batch_norm_4)
         self.uplayer_4_conv1 = DataParallel(self.uplayer_4_conv1)
         self.uplayer_4_conv2 = DataParallel(self.uplayer_4_conv2)
-        self.upconv_4 = DataParallel(self.upconv_4)
+        self.batch_norm_4_1 = DataParallel(self.batch_norm_4_1)
+        self.batch_norm_4_2 = DataParallel(self.batch_norm_4_2)
         # Layer 5
         self.layer_5_conv1 = DataParallel(self.layer_5_conv1)
         self.layer_5_conv2 = DataParallel(self.layer_5_conv2)
-        self.batch_norm_5 = DataParallel(self.batch_norm_5)
+        self.batch_norm_5_1 = DataParallel(self.batch_norm_5_1)
+        self.batch_norm_5_2 = DataParallel(self.batch_norm_5_2)
 
     def forward(self, x):
         # Down forward pass
         layer1 = self.layer_1_conv1(x)
+        layer1 = self.batch_norm_1_1(layer1)
         layer1 = relu(layer1)
         layer1 = self.layer_1_conv2(layer1)
+        layer1 = self.batch_norm_1_2(layer1)
         layer1 = relu(layer1)
-        layer1 = self.batch_norm_1(layer1)
 
         layer2 = MaxPool2d(2, stride=2)(layer1)
         layer2 = self.layer_2_conv1(layer2)
+        layer2 = self.batch_norm_2_1(layer2)
         layer2 = relu(layer2)
         layer2 = self.layer_2_conv2(layer2)
+        layer2 = self.batch_norm_2_2(layer2)
         layer2 = relu(layer2)
-        layer2 = self.batch_norm_2(layer2)
 
         layer3 = MaxPool2d(2, stride=2)(layer2)
         layer3 = self.layer_3_conv1(layer3)
+        layer3 = self.batch_norm_3_1(layer3)
         layer3 = relu(layer3)
         layer3 = self.layer_3_conv2(layer3)
+        layer3 = self.batch_norm_3_2(layer3)
         layer3 = relu(layer3)
-        layer3 = self.batch_norm_3(layer3)
 
         layer4 = MaxPool2d(2, stride=2)(layer3)
         layer4 = self.layer_4_conv1(layer4)
+        layer3 = self.batch_norm_4_1(layer3)
         layer4 = relu(layer4)
         layer4 = self.layer_4_conv2(layer4)
+        layer4 = self.batch_norm_4_2(layer4)
         layer4 = relu(layer4)
-        layer4 = self.batch_norm_4(layer4)
 
         layer5 = MaxPool2d(2, stride=2)(layer4)
         layer5 = self.layer_5_conv1(layer5)
+        layer5 = self.batch_norm_5_1(layer5)
         layer5 = relu(layer5)
         layer5 = self.layer_5_conv2(layer5)
+        layer5 = self.batch_norm_5_2(layer5)
         layer5 = relu(layer5)
-        layer5 = self.batch_norm_5(layer5)
 
         # Crops
         # TODO: needs te be modified to work for arbitrary input sizes

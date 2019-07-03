@@ -6,11 +6,10 @@ import random
 
 
 class DataSet:
-    def __init__(self, root, images_path, masks_path, transforms):
+    def __init__(self, root, images_path, masks_path):
         self.root = root
         self.images_path = images_path
         self.masks_path = masks_path
-        self.transforms = transforms
 
         self.imgs = list(
             sorted(os.listdir(os.path.join(root, images_path))))
@@ -30,15 +29,6 @@ class DataSet:
         mask = Image.open(mask_path).convert("L")
         mask.thumbnail((388, 388), Image.ANTIALIAS)
 
-        seed = np.random.randint(2147483647)
-        random.seed(seed)
-        if self.transforms is not None:
-            img = self.transforms(img)
-
-        random.seed(seed)
-        if self.transforms is not None:
-            mask = self.transforms(mask)
-
         img_on_white_background = np.array(
             white_background).reshape(572, 572, 3)
         img = img_on_white_background.transpose((2, 0, 1)) / 255.
@@ -48,7 +38,7 @@ class DataSet:
 
         img = torch.as_tensor(img, dtype=torch.float32)
         mask = torch.as_tensor(mask, dtype=torch.float32)
-        
+
         return img, mask
 
     def __len__(self):
