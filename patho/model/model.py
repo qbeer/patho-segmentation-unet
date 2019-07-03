@@ -37,7 +37,7 @@ class Model:
                 image, segmentation_map = image.to(
                     self.device), segmentation_map.to(self.device)
 
-                self.optimizer.zero_grad()
+                self.scheduler.zero_grad()
 
                 output_map = self.net(image)
                 loss = self.criterion(
