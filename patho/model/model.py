@@ -8,7 +8,7 @@ import os
 
 
 class Model:
-    def __init__(self, net, lr=5e-3, with_jaccard=False, load_model=False):
+    def __init__(self, net, lr=5e-4, with_jaccard=False, load_model=False):
         self.device = torch.device(
             'cuda') if torch.cuda.is_available() else torch.device('cpu')
         self.net = net
@@ -26,6 +26,7 @@ class Model:
         if with_jaccard:
             self.criterion = BCELossWithJaccard()
         self.optimizer = SGD(self.net.parameters(), lr=lr, momentum=0.99)
+        self.scheduler = StepLR(self.optimizer, step_size=20, gamma=0.1)
 
     def train(self, data_loader, EPOCH=10):
         for epoch in range(EPOCH):
@@ -52,6 +53,7 @@ class Model:
                     running_loss = 0.0
             loss_on_epoch_end /= (ind + 1)  # batch average loss
             print("Average 10-batch loss on epoch end : %.5f" % loss_on_epoch_end)
+            self.scheduler.step()
 
         torch.save(self.net.state_dict(), "patho/data/model.pt")
         print('Finished training!')
