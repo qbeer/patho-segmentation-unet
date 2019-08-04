@@ -43,11 +43,13 @@ class DataSet:
             img = img_on_white_background
 
         mask = Image.open(mask_path).convert("L")
-        maks = mask.resize((self.output_size, self.output_size), Image.ANTIALIAS)
+        maks = mask.resize((self.output_size, self.output_size),
+                           Image.ANTIALIAS)
 
         np_mask = np.array(mask).reshape(self.output_size, self.output_size, 1)
         mask = np_mask.transpose((2, 0, 1)) / 255.
 
+        img = np.array(img).reshape(self.input_size, self.input_size, 3)
         img = img.transpose((2, 0, 1)) / 255.
 
         img = torch.as_tensor(img, dtype=torch.float32)
