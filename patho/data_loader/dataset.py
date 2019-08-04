@@ -43,7 +43,7 @@ class DataSet:
             img = img_on_white_background
 
         mask = Image.open(mask_path).convert("L")
-        maks = mask.resize((self.output_size, self.output_size),
+        mask = mask.resize((self.output_size, self.output_size),
                            Image.ANTIALIAS)
 
         print(mask.size)
