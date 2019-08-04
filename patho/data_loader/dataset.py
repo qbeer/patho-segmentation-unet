@@ -46,7 +46,7 @@ class DataSet:
         maks = mask.resize((self.output_size, self.output_size),
                            Image.ANTIALIAS)
 
-        print(mask.shape)
+        print(mask.size)
         np_mask = np.array(mask).reshape(self.output_size, self.output_size, 1)
         mask = np_mask.transpose((2, 0, 1)) / 255.
 
