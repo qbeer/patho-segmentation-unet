@@ -5,11 +5,12 @@ verify_ssl = true
 
 [dev-packages]
 autopep8 = "*"
+yapf = "*"
 
 [packages]
 numpy = "*"
 pillow = "*"
-torch = "*"
+torch = {file = "http://download.pytorch.org/whl/cu91/torch-1.1.0-cp36-cp36m-linux_x86_64.whl"}
 torchvision = "*"
 
 [requires]

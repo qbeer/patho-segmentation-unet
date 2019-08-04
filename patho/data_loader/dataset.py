@@ -6,35 +6,49 @@ import random
 
 
 class DataSet:
-    def __init__(self, root, images_path, masks_path):
+    def __init__(self,
+                 root,
+                 images_path,
+                 masks_path,
+                 input_size=572,
+                 output_size=388):
         self.root = root
         self.images_path = images_path
         self.masks_path = masks_path
+        self.input_size = input_size
+        self.output_size = output_size
 
-        self.imgs = list(
-            sorted(os.listdir(os.path.join(root, images_path))))
-        self.masks = list(
-            sorted(os.listdir(os.path.join(root, masks_path))))
+        self.imgs = list(sorted(os.listdir(os.path.join(root, images_path))))
+        self.masks = list(sorted(os.listdir(os.path.join(root, masks_path))))
 
     def __getitem__(self, idx):
         img_path = os.path.join(self.root, self.images_path, self.imgs[idx])
         mask_path = os.path.join(self.root, self.masks_path, self.masks[idx])
 
         img = Image.open(img_path).convert("RGB")
-        img.thumbnail((388, 388), Image.ANTIALIAS)
+        img.thumbnail((self.input_size, self.input_size), Image.ANTIALIAS)
 
-        white_background = Image.new("RGB", (572, 572), "white")
-        white_background.paste(img, (92, 92))
+        if self.input_size != self.output_size:
+            img.thumbnail((self.output_size, self.output_size),
+                          Image.ANTIALIAS)
+
+            white_background = Image.new("RGB",
+                                         (self.input_size, self.input_size),
+                                         "white")
+            white_background.paste(img, (92, 92))
+
+            img_on_white_background = np.array(white_background).reshape(
+                self.input_size, self.input_size, 3)
+
+            img = img_on_white_background
 
         mask = Image.open(mask_path).convert("L")
-        mask.thumbnail((388, 388), Image.ANTIALIAS)
+        maks = mask.resize((self.output_size, self.output_size), Image.ANTIALIAS)
 
-        img_on_white_background = np.array(
-            white_background).reshape(572, 572, 3)
-        img = img_on_white_background.transpose((2, 0, 1)) / 255.
-
-        np_mask = np.array(mask).reshape(388, 388, 1)
+        np_mask = np.array(mask).reshape(self.output_size, self.output_size, 1)
         mask = np_mask.transpose((2, 0, 1)) / 255.
+
+        img = img.transpose((2, 0, 1)) / 255.
 
         img = torch.as_tensor(img, dtype=torch.float32)
         mask = torch.as_tensor(mask, dtype=torch.float32)
