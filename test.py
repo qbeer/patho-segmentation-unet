@@ -7,8 +7,13 @@ data_loader = DataLoader("patho/data/crc",
                          output_size=572).getInstance()
 unet = UNET_VGG()
 
-model = Model(unet)
+for img, mask in data_loader:
+    break
 
-print("Init done.")
+print(unet.forward(img).shape)
+#model = Model(unet)
 
-model.train(data_loader, EPOCH=1)
+
+#print("Init done.")
+
+#model.train(data_loader, EPOCH=1)

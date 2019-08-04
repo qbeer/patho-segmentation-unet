@@ -64,7 +64,7 @@ class UNET_VGG(Module):
         # (, 128, 286, 286)
         self.uplayer_1_conv1 = Conv2d(128, 64, 3, padding=(1, 1))
         self.uplayer_1_conv2 = Conv2d(64, 64, 3, padding=(1, 1))
-        self.uplayer_1_conv3 = Conv2d(64, 1, 1, padding=(1, 1))
+        self.uplayer_1_conv3 = Conv2d(64, 1, 1)
         self.up_batch_norm_1_1 = BatchNorm2d(64)
         self.up_batch_norm_1_2 = BatchNorm2d(64)
         self.upconv_1 = ConvTranspose2d(128,
