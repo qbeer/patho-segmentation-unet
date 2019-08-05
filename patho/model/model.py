@@ -2,7 +2,7 @@ from ..custom_loss import BCELossWithJaccard
 from torch.nn import BCELoss
 from torch.optim import SGD
 from torch.optim.lr_scheduler import StepLR
-from ..model import UNET
+from ..model import UNET_VGG
 import torch
 import os
 
@@ -13,7 +13,7 @@ class Model:
             'cuda') if torch.cuda.is_available() else torch.device('cpu')
         self.net = net
         if load_model:
-            self.net = UNET()
+            self.net = UNET_VGG()
             try:
                 self.net.load_state_dict(torch.load("patho/data/model.pt"))
             except RuntimeError:
@@ -40,19 +40,20 @@ class Model:
                 self.optimizer.zero_grad()
 
                 output_map = self.net(image)
-                loss = self.criterion(
-                    output_map.view(-1), segmentation_map.view(-1))
+                loss = self.criterion(output_map.view(-1),
+                                      segmentation_map.view(-1))
                 loss.backward()
                 self.optimizer.step()
 
                 running_loss += loss.item()
                 loss_on_epoch_end += loss.item()
-                if ind % 10 == 9:    # print every 10 mini-batches
+                if ind % 10 == 9:  # print every 10 mini-batches
                     print('[%d, %5d] loss: %.3f' %
                           (epoch + 1, ind + 1, running_loss / 10))
                     running_loss = 0.0
             loss_on_epoch_end /= (ind + 1)  # batch average loss
-            print("Average 10-batch loss on epoch end : %.5f" % loss_on_epoch_end)
+            print("Average 10-batch loss on epoch end : %.5f" %
+                  loss_on_epoch_end)
             self.scheduler.step()
 
         torch.save(self.net.state_dict(), "patho/data/model.pt")
