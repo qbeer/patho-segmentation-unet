@@ -31,7 +31,7 @@ for ind_, (imgs, masks) in enumerate(data_loader):
             area2 = np.sum(predicted_masks[ind // 3].flatten())
             smooth = 1.
             dice = (2 * intersection + smooth) / (area1 + area2 + smooth)
-            ax.set_title("Dice coefficient : %.2f %%", (100 * dice))
+            ax.set_title("Dice coefficient : %.2f %%" % (100 * dice))
             ax.imshow(predicted_masks[ind // 3].transpose(
                 (1, 2, 0)).reshape(572, 572))
 
@@ -55,7 +55,7 @@ for ind_, (imgs, masks) in enumerate(data_loader):
             area2 = np.sum(predicted_masks[ind // 3].flatten())
             smooth = 1.
             dice = (2 * intersection + smooth) / (area1 + area2 + smooth)
-            ax.set_title("Dice coefficient : %.2f %%", (100 * dice))
+            ax.set_title("Dice coefficient : %.2f %%" % (100 * dice))
             ax.imshow(predicted_masks[ind // 3].transpose(
                 (1, 2, 0)).reshape(572, 572))
 
