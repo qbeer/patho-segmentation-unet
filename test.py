@@ -2,16 +2,18 @@ from patho import Model, UNET_VGG, DataLoader
 import matplotlib.pyplot as plt
 import numpy as np
 
-data_loader = DataLoader("patho/data/crc",
+data_loader = DataLoader("patho/data/membrane",
                          "images",
                          "masks",
                          batch_size=3,
+                         input_size=572,
                          output_size=572).getInstance()
 
 unet = UNET_VGG()
 unet.make_parallel()
 
-model = Model(unet, lr=5e-6, with_jaccard=True, load_model=True)
+model = Model(unet, lr=5e-3, with_jaccard=True)
+model.train(data_loader, 10)
 
 for ind_, (imgs, masks) in enumerate(data_loader):
     predicted_masks = model.net(imgs.cuda()).cpu().detach().numpy()

@@ -26,7 +26,7 @@ class DataSet:
         mask_path = os.path.join(self.root, self.masks_path, self.masks[idx])
 
         img = Image.open(img_path).convert("RGB")
-        img.thumbnail((self.input_size, self.input_size), Image.ANTIALIAS)
+        img = img.resize((self.input_size, self.input_size), Image.ANTIALIAS)
 
         if self.input_size != self.output_size:
             img.thumbnail((self.output_size, self.output_size),
