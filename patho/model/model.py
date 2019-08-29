@@ -2,18 +2,21 @@ from ..custom_loss import BCELossWithJaccard
 from torch.nn import BCELoss
 from torch.optim import SGD
 from torch.optim.lr_scheduler import StepLR
-from ..model import UNET_VGG
+from ..model import UNET_VGG, UNET
 import torch
 import os
 
 
 class Model:
-    def __init__(self, net, lr=5e-4, with_jaccard=False, load_model=False):
+    def __init__(self, net, lr=5e-4, with_jaccard=False, load_model=False, vgg=False):
         self.device = torch.device(
             'cuda') if torch.cuda.is_available() else torch.device('cpu')
         self.net = net
         if load_model:
-            self.net = UNET_VGG()
+            if vgg:
+                self.net = UNET_VGG()
+            else:
+                self.net = UNET()
             try:
                 self.net.load_state_dict(torch.load("patho/data/model.pt"))
             except RuntimeError:

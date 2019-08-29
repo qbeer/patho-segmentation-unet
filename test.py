@@ -12,7 +12,7 @@ data_loader = DataLoader("patho/data/membrane",
 unet = UNET_VGG()
 unet.make_parallel()
 
-model = Model(unet, lr=5e-3, with_jaccard=True)
+model = Model(unet, lr=5e-3, with_jaccard=True, vgg=True)
 model.train(data_loader, 10)
 
 for ind_, (imgs, masks) in enumerate(data_loader):
